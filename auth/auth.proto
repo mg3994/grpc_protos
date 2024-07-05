@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+service AuthRpc {
+    rpc SignIn (SignInRequest) returns (TokensDto);
+    rpc SignUp (SignUpRequest) returns (TokensDto);
+    rpc RefreshToken (TokensDto) returns (TokensDto);
+    rpc UpdateUser (UpdateUserRequest) returns (UserDto);
+    rpc DeleteUser (UserRequest) returns (ResponseDto);
+    rpc FetchUser (UserRequest) returns (UserDto);
+    rpc FindUser (FindUserRequest) returns (ListUsersDto);
+    rpc SignInSms (SmsSignInRequest) returns (TokensDto);
+    rpc SendSms (SmsRequest) returns (ResponseDto);
+}
+
+message SignInRequest {
+    oneof credentials {
+        EmailPasswordDto emailPassword = 1;
+        PhonePasswordDto phonePassword = 2;
+        AuthProviderDto authProvider = 3;
+    }
+}
+
+message SignUpRequest {
+    string username = 1;
+    oneof contact_info {
+        EmailPasswordDto emailPassword = 2;
+        PhonePasswordDto phonePassword = 3;
+        AuthProviderDto authProvider = 4;
+    }
+}
+
+message UpdateUserRequest {
+    string user_id = 1;
+    string username = 2;
+    oneof contact_info {
+        string email = 3;
+        string phone = 4;
+    }
+    string password = 5;
+    AuthProviderDto authProvider = 6;
+}
+
+message UserRequest {
+    string user_id = 1;
+}
+
+message FindUserRequest {
+    string key = 1;
+    string limit = 2;
+    string offset = 3;
+}
+
+message SmsSignInRequest {
+    string phone = 1;
+    string code = 2;
+}
+
+message SmsRequest {
+    string phone = 1;
+}
+
+message ListUsersDto {
+    repeated UserDto users = 1;
+}
+
+message EmailPasswordDto {
+    string email = 1;
+    string password = 2;
+}
+
+message PhonePasswordDto {
+    string phone = 1;
+    string password = 2;
+}
+
+message AuthProviderDto {
+    string provider = 1; // e.g., google, apple, facebook, twitter
+    string provider_id = 2; // ID from the auth provider
+    string token = 3; // Token from the auth provider
+}
+
+message UserDto {
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    string phone = 4;
+    string profile_picture = 5; // URL to the user's profile picture
+    string bio = 6; // User's bio or description
+    AuthProviderDto auth_provider = 7;
+}
+
+message TokensDto {
+    string access_token = 1;
+    string refresh_token = 2;
+    int64 expires_in = 3; // Expiration time in seconds
+}
+
+message ResponseDto {
+    string message = 1;
+    int32 code = 2; // Response code
+}
