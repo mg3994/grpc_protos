@@ -1,0 +1,60 @@
+
+syntax = "proto3";
+
+
+
+service TodoService {
+  rpc CreateTodo (CreateTodoRequest) returns (CreateTodoResponse) {}
+  rpc ReadTodos (ReadTodosRequest) returns (ReadTodosResponse) {}
+  rpc ReadTodo (ReadTodoRequest) returns (ReadTodoResponse) {}
+  rpc UpdateTodo (UpdateTodoRequest) returns (UpdateTodoResponse) {}
+  rpc DeleteTodo (DeleteTodoRequest) returns (DeleteTodoResponse) {}
+}
+
+message Todo {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+}
+
+message CreateTodoRequest {
+  string title = 1;
+  string description = 2;
+}
+
+message CreateTodoResponse {
+  Todo todo = 1;
+}
+
+message ReadTodosRequest {}
+
+message ReadTodosResponse {
+  repeated Todo todos = 1;
+}
+
+message ReadTodoRequest {
+  string id = 1;
+}
+
+message ReadTodoResponse {
+  Todo todo
+  = 1;
+}
+
+message UpdateTodoRequest {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+}
+
+message UpdateTodoResponse {
+  Todo todo = 1;
+}
+
+message DeleteTodoRequest {
+  string id = 1;
+}
+
+message DeleteTodoResponse {
+  bool success = 1;
+}
